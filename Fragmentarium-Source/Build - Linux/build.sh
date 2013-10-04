@@ -1,22 +1,14 @@
 #!/bin/sh
 
-cd ..
+cd `dirname $0`/..
+
 qmake-qt4 -project -after "CONFIG+=opengl" -after "QT+=xml opengl script"
 qmake-qt4
-make
 
-cd "Build - Linux"
-
-rm -rf Fragmentarium
-mkdir "Fragmentarium"
-mkdir "Fragmentarium/Examples"
-cp -r ../Examples/* "Fragmentarium/Examples"
-mkdir "Fragmentarium/Misc"
-cp -r ../Misc/* "Fragmentarium/Misc"
-cp ../Fragmentarium-Source "Fragmentarium/Fragmentarium"
-
-cd "Fragmentarium"
-rm -rf `find . -type d -name .svn`
-cd ..
-
-
+make Fragmentarium-Source clean &&
+	rm Fragmentarium-Source.pro Makefile &&
+	mkdir -p build &&
+	cd build &&
+	mv ../Fragmentarium-Source Fragmentarium &&
+	ln -fs ../Examples &&
+	ln -fs ../Misc
